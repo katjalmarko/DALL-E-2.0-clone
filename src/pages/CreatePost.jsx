@@ -1,18 +1,20 @@
-import React, { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
-import { preview } from '../assets'
-import { getRandomPrompt } from '../utils'
-import { FormField, Loader } from '../components'
+import { preview } from '../assets';
+import { getRandomPrompt } from '../utils';
+import { FormField, Loader } from '../components';
 
 const CreatePost = () => {
-  const navigate = useNavigate()
+  const navigate = useNavigate();
+
   const [form, setForm] = useState({
     name: '',
     prompt: '',
     photo: '',
-  })
-  const [generatingImg, setGeneratingImg] = useState(true)
+  });
+  const [generatingImg, setGeneratingImg] = useState(false)
+  
   const [loading, setLoading] = useState(false)
 
   const generateImage = () => {
@@ -58,6 +60,7 @@ const CreatePost = () => {
             value={form.name}
             handleChange={handleChange} 
             />
+
             <FormField
             LabelName="Prompt"
             type="text"
@@ -72,7 +75,7 @@ const CreatePost = () => {
             <div
               className='relative bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 w-64 p-3 h-64 flex justify-center items-center'
               >
-                {form.photo ? (
+                { form.photo ? (
                   <img 
                     src={form.photo} 
                     alt={form.prompt}
