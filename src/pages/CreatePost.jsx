@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import { preview } from '../assets';
@@ -17,14 +17,6 @@ const CreatePost = () => {
   
   const [loading, setLoading] = useState(false)
 
-  const generateImage = () => {
-
-  }
-
-  const handleSubmit = () => {
-
-  }
-
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value })
   }
@@ -34,6 +26,57 @@ const CreatePost = () => {
     setForm({ ...form, prompt: randomPrompt })
   }
 
+  const generateImage = async () => {
+    if(form.prompt) {
+      try {
+        setGeneratingImg(true);
+        const response = await fetch('https://dall-e-ersy.onrender.com/api/v1/dalle', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ prompt: form.prompt, })
+        })
+
+        const data = await response.json();
+
+        setForm({ ...form, photo: `data:image/jpeg;base64,${data.photo}` })
+      } catch (error) {
+        alert(error);
+      } finally {
+        setGeneratingImg(false);
+      }
+    } else {
+      alert('Please enter a prompt')
+    }
+  }
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    if(form.prompt && form.photo) {
+      setLoading(true);
+      try {
+        const response = await fetch('https://dall-e-ersy.onrender.com/api/v1/post', {
+          method: 'Post',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ ...form }),
+        }) 
+
+        await response.json();
+        alert('Success')
+        navigate('/');
+      } catch (err) {
+        alert(err);
+      } finally {
+        setLoading(false);
+      }
+    } else {
+      alert ('Please enter a prompt and generate an image')
+    }
+  }
 
 
   return (
@@ -53,19 +96,19 @@ const CreatePost = () => {
             onSubmit={handleSubmit}>
         <div className='flex flex-col gap-5'>
           <FormField
-            LabelName="Your name"
+            labelName="Your name"
             type="text"
             name="name"
-            placeholder="John Doe"
+            placeholder="Ex., John Doe"
             value={form.name}
             handleChange={handleChange} 
             />
 
             <FormField
-            LabelName="Prompt"
+            labelName="Prompt"
             type="text"
             name="prompt"
-            placeholder="A photo of a Samoyed dog with its tongue out hugging a white Siamese cat"
+            placeholder="Ex., A photo of a Samoyed dog with its tongue out hugging a white Siamese cat"
             value={form.prompt}
             handleChange={handleChange}
             isSurpriseMe
@@ -93,6 +136,10 @@ const CreatePost = () => {
                   <div 
                     className='absolute inset-0 z-0 flex justify-center items-center bg-[rgba(0,0,0,0.5)] rounded-lg'>
                     <Loader />
+                    <span 
+                  className='animate-bounce font-bold text-white'>
+                    Generating...
+                  </span>
                   </div>
                 )}
             </div>
@@ -121,7 +168,6 @@ const CreatePost = () => {
               {loading ? 'Sharing...' : 'Share with the community'}
           </button>
         </div>
-
       </form>
     </section>
   )
