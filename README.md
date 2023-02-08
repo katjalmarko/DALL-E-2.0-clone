@@ -10,6 +10,10 @@ This project is a clone of OpenAI's DALL-E 2.0 model, implemented with the follo
 - Image hosting provided by [Cloudinary](https://cloudinary.com/)
 - Deployment through [Render](https://render.com/)
 
+## Frontend Code
+
+- Frontend code visible on branch "frontend-folder-of-dall-e"
+
 ## Acknowledgments
 
 - [OpenAI](https://openai.com) for the inspiration behind this project
