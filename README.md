@@ -1,5 +1,7 @@
 # DALL-E 2.0 Clone
 
+https://user-images.githubusercontent.com/119958748/217624519-768b97ab-a45d-4d37-aef8-5efdf22fc8de.mov
+
 This project is a clone of OpenAI's DALL-E 2.0 model, implemented with the following technologies:
 
 - Run by [Vite](https://github.com/vuejs/vite)
